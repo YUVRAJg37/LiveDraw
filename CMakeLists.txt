@@ -19,3 +19,4 @@ add_executable(main src/main.cpp
         src/Components/UICollection/UICollection.cpp
         src/Components/UICollection/UICollection.h)
 target_link_libraries(main PRIVATE SFML::Graphics)
+target_link_libraries(main PRIVATE Dwmapi)

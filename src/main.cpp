@@ -1,12 +1,24 @@
+#include <iostream>
+
 #include <SFML/Graphics.hpp>
+#include <Dwmapi.h>
 
 #include "Components/UICollection/UICollection.h"
 #include "Components/Button/Button.h"
 
+void MakeWindowTransparent(const HWND& hwnd) {
+    SetWindowLong(hwnd, GWL_EXSTYLE, GetWindowLong(hwnd, GWL_EXSTYLE) | WS_EX_LAYERED);
+    SetLayeredWindowAttributes(hwnd, 0, 50, LWA_ALPHA);
+}
+
 int main()
 {
-    auto window = std::make_shared<sf::RenderWindow>(sf::RenderWindow(sf::VideoMode({800u, 600u}), "Live-Draw"));
+    const sf::Vector2<unsigned int> size = sf::VideoMode::getDesktopMode().size;
+    const auto window = std::make_shared<sf::RenderWindow>(sf::RenderWindow(sf::VideoMode(size), "Live-Draw"));
+
     window->setFramerateLimit(144);
+
+    MakeWindowTransparent(window->getNativeHandle());
 
     const auto collection = std::make_unique<UICollection>();
 
@@ -26,7 +38,7 @@ int main()
 
             collection->Poll(window, event);
         }
-        window->clear();
+        window->clear(sf::Color::Transparent);
 
         collection->Draw(window);
 
